@@ -72,7 +72,7 @@ class Database:
         # Decrypt data entry
         get_secret = Encrypt(entry['secret'])
         secret = get_secret.decrypt()
-        # Make object
+        # Make dictionary to be outputted
         new_dict = {
             "title": entry['title'],
             "desc": entry['desc'],

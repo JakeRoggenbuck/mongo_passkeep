@@ -34,7 +34,7 @@ class Encrypt:
         return obj
 
     def encrypt(self):
-        # Make message object into string
+        # Make message dict into string
         self.message = json.dumps(self.message)
         # Add characters until message is a multiple of 16
         while len(self.message) % 16 != 0:
@@ -45,5 +45,5 @@ class Encrypt:
     def decrypt(self):
         # Return decrypted message and remove extra characters
         message = self.obj.decrypt(self.message).decode("utf-8").rstrip()
-        # Make message back into an object
+        # Make message back into a dictionary
         return json.loads(message)
