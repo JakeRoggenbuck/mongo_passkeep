@@ -1,11 +1,29 @@
 from Crypto.Cipher import AES
+from pathlib import Path
+from os import path
+import yaml
 import json
 
 
+class Config:
+    def __init__(self):
+        home = str(Path.home())
+        print(home)
+        full_path = path.join(home, '.config/mongo_passkeep/config.yml')
+        self.path = full_path
+        self.config = self.get_config()
+
+    def get_config(self):
+        config_file = open(self.path)
+        config = yaml.load(config_file, Loader=yaml.FullLoader)
+        return config
+
+
 class Encrypt:
-    def __init__(self, message, key='This is a key123'):
+    def __init__(self, message):
+        self.config = Config()
+        self.key = self.config.config['key']
         self.message = message
-        self.key = key
         self.obj = self.aes()
 
     def aes(self):
