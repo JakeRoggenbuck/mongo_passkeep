@@ -17,12 +17,14 @@ class Database:
         self.entries = self.db.entries
 
     def check_multiple_input(self, entry):
+        """Check if title exists"""
         if self.entries.find_one(entry['title']) is None:
             return True
         else:
             return False
 
     def make_view(self, obj):
+        """Make printable string with colors and data"""
         title = obj['title']
         desc = obj['desc']
         _id = obj['_id']
@@ -32,6 +34,7 @@ class Database:
         return f"{c_title}: {c_id}\n-- {desc}\n"
 
     def secret_view(self, obj):
+        """Make printable string with secret data"""
         username = obj['username']
         email = obj['email']
         password = obj['password']
@@ -48,18 +51,28 @@ class Database:
         print(f"Message: {c_message}")
 
     def view_all(self):
+        """View all password entries"""
         for entry in self.entries.find({}):
+            # Send password to make_view to get output
             print(self.make_view(entry))
 
     def write(self, entry):
+        """Write entire data entry to table"""
+        # Check if title exists
         if self.check_multiple_input(entry):
+            # Write entry to database
             self.entries.insert_one(entry)
 
     def read(self, _id):
+        """Read data by id"""
+        # Get document by id
         doc = self.get_document(_id)
+        # TODO: Fix this weird logic
         entry = self.entries.find_one(doc['_id'])
+        # Decrypt data entry
         get_secret = Encrypt(entry['secret'])
         secret = get_secret.decrypt()
+        # Make object
         new_dict = {
             "title": entry['title'],
             "desc": entry['desc'],
@@ -68,11 +81,13 @@ class Database:
         return new_dict
 
     def get_document(self, object_id):
+        """Get document and id object by id"""
         _id = {"_id": ObjectId(object_id)}
         doc = self.entries.find_one(_id)
         return {"_id": _id, "doc": doc}
 
     def edit(self, object_id):
+        """Edit title and desc with id"""
         doc = self.get_document(object_id)
         print(self.make_view(doc['doc']))
         edit = input("Change title or desc: [t/d]: ")
@@ -92,6 +107,7 @@ class Database:
             print(new_desc)
 
     def delete_document(self, object_id):
+        """Delete document from database by id"""
         doc = self.get_document(object_id)
         delete = input(f"{doc['rep']}\nDelete the document [Y/n]: ")
         if delete.upper() == "Y":
