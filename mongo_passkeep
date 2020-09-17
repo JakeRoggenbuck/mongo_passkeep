@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+import fire
+import json
+from utils import Promt
+from database import Database
+
+
+class MongoPasskeep(object):
+    def __init__(self):
+        self.db = Database()
+        self.db.connect()
+
+    def write(self):
+        promt = Promt()
+        self.db.write(promt.entry)
+
+    def view(self):
+        self.db.view_all()
+
+    def delete(self, _id):
+        self.db.delete_document(_id)
+
+    def edit(self, _id):
+        self.db.edit(_id)
+
+    def read(self, _id):
+        doc = self.db.read(_id)
+        sec = doc['secret']
+        sec = json.loads(sec)
+        self.db.secret_view(sec)
+
+
+if __name__ == '__main__':
+    fire.Fire(MongoPasskeep)
