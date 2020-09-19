@@ -5,14 +5,14 @@ from termcolor import colored
 
 
 class Database:
-    def __init__(self, location="localhost", ip="127.0.0.1"):
+    def __init__(self, location="localhost", port=27017):
         """Sets defaults for parameters"""
         self.location = location
-        self.ip = ip
+        self.port = port
 
     def connect(self):
         """Make the client, connect the db and create the collections"""
-        self.client = MongoClient()
+        self.client = MongoClient(self.location, self.port)
         self.db = self.client.password_keeper
         self.entries = self.db.entries
 
