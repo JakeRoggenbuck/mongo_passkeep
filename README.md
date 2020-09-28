@@ -1,4 +1,5 @@
 # mongo_passkeep
+A command line utility for storing passwords
 
 ## Cli
 
